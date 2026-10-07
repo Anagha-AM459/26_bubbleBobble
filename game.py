@@ -28,8 +28,8 @@ def bubble_tint(bubble):
 
 
 def on_fruit_collected(fruit):
-    """Track collected fruits."""
-    game.fruits_collected += 1
+    """Called when the player picks up a fruit."""
+    return fruit.value
 
 
 def bonus_life_threshold():
@@ -208,6 +208,7 @@ class Game:
             if fruit.rect.colliderect(player.rect):
                 self.score += fruit.value
                 self.fruits.remove(fruit)
+                self.fruits_collected += 1
                 on_fruit_collected(fruit)
             elif fruit.life <= 0:
                 self.fruits.remove(fruit)
