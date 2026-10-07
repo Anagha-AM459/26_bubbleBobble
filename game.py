@@ -16,13 +16,20 @@ SPAWNS = [(200, 330), (600, 330), (100, 210), (700, 210), (150, 450), (650, 450)
 
 
 def bubble_tint(bubble):
-    """Return an (r, g, b) colour for a bubble, or None for the default."""
-    pass
+    """Return a very obvious colour based on bubble age."""
+    if bubble.age < 1:
+        return (0, 0, 255)       # BLUE
+    elif bubble.age < 2:
+        return (0, 255, 0)       # GREEN
+    elif bubble.age < 3:
+        return (255, 255, 0)     # YELLOW
+    else:
+        return (255, 0, 0)       # RED
 
 
 def on_fruit_collected(fruit):
-    """Called when the player picks up a fruit; add a sound, sparkle, or bonus effect here."""
-    pass
+    """Track collected fruits."""
+    game.fruits_collected += 1
 
 
 def bonus_life_threshold():
@@ -131,6 +138,7 @@ class Game:
     def reset(self):
         self.level, self.score, self.lives, self.combo, self.state = 1, 0, 3, 0, "play"
         self.bonus_awarded = 0
+        self.fruits_collected = 0
         self.player = Player()
         self.fruits = []
         self.start_level()
@@ -237,7 +245,10 @@ class Game:
             pygame.draw.rect(screen, (70, 210, 110), player.rect, border_radius=8)
             eye = player.center + (player.facing * 6, -4)
             pygame.draw.circle(screen, (255, 255, 255), eye, 4)
-        hud = self.font.render(f"Score {self.score}  Lives {self.lives}  Level {self.level}  R = reset", True, (240, 240, 240))
+        hud = self.font.render( f"Score {self.score}  Lives {self.lives}  Level {self.level}  Fruits {self.fruits_collected}  R = reset",
+    True,
+    (240, 240, 240)
+)
         screen.blit(hud, (10, 8))
         if self.state == "lose":
             label = self.font.render("GAME OVER - Press R", True, (255, 255, 120))
